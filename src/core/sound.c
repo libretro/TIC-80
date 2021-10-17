@@ -24,6 +24,7 @@
 #include "api.h"
 #include "core.h"
 
+#include <stddef.h>
 #include <string.h>
 #include <assert.h>
 
