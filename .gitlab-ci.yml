@@ -38,8 +38,8 @@ include:
     file: '/ctr-static-cmake.yml'
 
   # OpenDingux
-  #- project: 'libretro-infrastructure/ci-templates'
-  #  file: '/dingux-cmake.yml'
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/dingux-cmake.yml'
 
 # Stages for building
 stages:
@@ -115,19 +115,19 @@ libretro-build-ctr:
     - .core-defs
 
 # OpenDingux
-#libretro-build-dingux-mips32:
-#  extends:
-#    - .libretro-dingux-cmake-mips32
-#    - .core-defs
-#  variables:
-#    DINGUX_CFLAGS:   -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
-#    DINGUX_CXXFLAGS: -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
+libretro-build-dingux-mips32:
+  extends:
+    - .libretro-dingux-cmake-mips32
+    - .core-defs
+  variables:
+    DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
+    DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
 
 # OpenDingux Beta
-#libretro-build-dingux-odbeta-mips32:
-#  extends:
-#    - .libretro-dingux-odbeta-cmake-mips32
-#    - .core-defs
-#  variables:
-#    DINGUX_CFLAGS:   -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
-#    DINGUX_CXXFLAGS: -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
+libretro-build-dingux-odbeta-mips32:
+  extends:
+    - .libretro-dingux-odbeta-cmake-mips32
+    - .core-defs
+  variables:
+    DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
+    DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
