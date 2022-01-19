@@ -42,6 +42,10 @@ include:
   - project: 'libretro-infrastructure/ci-templates'
     file: '/dingux-cmake.yml'
 
+  # VITA
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/vita-static-cmake.yml'
+
 # Stages for building
 stages:
   - build-prepare
@@ -132,3 +136,11 @@ libretro-build-dingux-odbeta-mips32:
   variables:
     DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
     DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
+
+# VITA
+libretro-build-vita:
+  extends:
+    - .libretro-vita-static-cmake-retroarch-master
+    - .core-defs
+  variables:
+    CORE_ARGS: -DBUILD_PLAYER=OFF -DBUILD_SOKOL=OFF -DBUILD_SDL=OFF -DBUILD_DEMO_CARTS=OFF -DBUILD_LIBRETRO=ON -DCMAKE_POSITION_INDEPENDENT_CODE=OFF
