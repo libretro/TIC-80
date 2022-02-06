@@ -19,7 +19,7 @@ include:
   # Linux
   - project: 'libretro-infrastructure/ci-templates'
     file: '/linux-cmake.yml'
-    
+
   # Windows
   - project: 'libretro-infrastructure/ci-templates'
     file: '/windows-cmake-mingw.yml'
