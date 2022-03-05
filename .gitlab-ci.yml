@@ -96,6 +96,22 @@ libretro-build-osx-x64:
     - .libretro-osx-cmake-x86
     - .core-defs
 
+# MacOS ARM64
+libretro-build-osx-aarch64:
+  extends:
+    - .libretro-osx-cmake
+    - .core-defs
+  variables:
+    MACOSX_DEPLOYMENT_TARGET: "10.9"
+    ARCH: aarch64
+    CMAKE: cmake
+
+# MacOS 32-bit
+libretro-build-osx-x86:
+  extends:
+    - .libretro-osx-cmake-x86
+    - .core-defs
+
 ################################### CELLULAR #################################
 # Android ARMv7a
 android-armeabi-v7a:
