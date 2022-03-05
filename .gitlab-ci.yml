@@ -50,6 +50,11 @@ include:
   - project: 'libretro-infrastructure/ci-templates'
     file: '/libnx-static-cmake.yml' 
 
+  ################################## MISC ####################################
+  # Emscripten
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/emscripten-static-cmake.yml' 
+
 # Stages for building
 stages:
   - build-prepare
@@ -87,6 +92,22 @@ libretro-build-windows-i686:
 
 # MacOS 64-bit
 libretro-build-osx-x64:
+  extends:
+    - .libretro-osx-cmake-x86
+    - .core-defs
+
+# MacOS ARM64
+libretro-build-osx-aarch64:
+  extends:
+    - .libretro-osx-cmake
+    - .core-defs
+  variables:
+    MACOSX_DEPLOYMENT_TARGET: "10.9"
+    ARCH: aarch64
+    CMAKE: cmake
+
+# MacOS 32-bit
+libretro-build-osx-x86:
   extends:
     - .libretro-osx-cmake-x86
     - .core-defs
@@ -153,4 +174,20 @@ libretro-build-vita:
 libretro-build-libnx:
   extends:
     - .libretro-libnx-static-cmake-retroarch-master
+    - .core-defs
+
+libretro-build-rs90-mips32-odbeta:
+  extends:
+    - .libretro-rs90-odbeta-cmake-mips32
+    - .core-defs
+  variables:
+    DINGUX_CFLAGS:   -fno-fast-math
+    DINGUX_CXXFLAGS: -fno-fast-math
+
+################################### MISC #####################################
+
+# Emscripten
+libretro-build-emscripten:
+  extends:
+    - .libretro-emscripten-static-cmake-retroarch-master
     - .core-defs
