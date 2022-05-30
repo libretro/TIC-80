@@ -58,6 +58,18 @@ include:
   - project: 'libretro-infrastructure/ci-templates'
     file: '/libnx-static-cmake.yml' 
 
+  # Gamecube
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/ngc-static-cmake.yml'
+
+  # Wii
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/wii-static-cmake.yml'
+
+  # WiiU
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/wiiu-static-cmake.yml'
+
   ################################## MISC ####################################
   # Emscripten
   - project: 'libretro-infrastructure/ci-templates'
@@ -213,6 +225,24 @@ libretro-build-rs90-odbeta-mips32:
   variables:
     DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32 -fno-fast-math
     DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32 -fno-fast-math
+
+# Gamecube
+libretro-build-ngc:
+  extends:
+    - .libretro-ngc-static-cmake-retroarch-master
+    - .core-defs
+
+# Wii
+libretro-build-wii:
+  extends:
+    - .libretro-wii-static-cmake-retroarch-master
+    - .core-defs
+
+# WiiU
+libretro-build-wiiu:
+  extends:
+    - .libretro-wiiu-static-cmake-retroarch-master
+    - .core-defs
 
 ################################### MISC #####################################
 
