@@ -32,6 +32,10 @@ include:
   - project: 'libretro-infrastructure/ci-templates'
     file: '/osx-cmake-arm64.yml'
 
+  # MacOS PPC
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/osx-cmake-ppc.yml'
+
   ################################## CELLULAR ################################    
   # Android
   - project: 'libretro-infrastructure/ci-templates'
@@ -99,6 +103,14 @@ libretro-build-osx-x64:
   extends:
     - .libretro-osx-cmake-x86
     - .core-defs
+
+# MacOS PPC
+libretro-build-osx-ppc:
+  extends:
+    - .libretro-osx-cmake-ppc
+    - .core-defs
+  variables:
+    CORE_ARGS: -DBUILD_PLAYER=OFF -DBUILD_SOKOL=OFF -DBUILD_SDL=OFF -DBUILD_DEMO_CARTS=OFF -DBUILD_LIBRETRO=ON -DBUILD_WITH_MRUBY=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=10.4 -DUSE_LIBUV=OF
 
 # MacOS ARM64
 libretro-build-osx-arm64:
