@@ -190,8 +190,8 @@ libretro-build-rs90-odbeta-mips32:
     - .libretro-rs90-odbeta-cmake-mips32
     - .core-defs
   variables:
-    DINGUX_CFLAGS:   -fno-fast-math
-    DINGUX_CXXFLAGS: -fno-fast-math
+    DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32 -fno-fast-math
+    DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32 -fno-fast-math
 
 ################################### MISC #####################################
 
