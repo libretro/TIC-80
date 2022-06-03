@@ -162,6 +162,15 @@ libretro-build-dingux-odbeta-mips32:
     DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
     DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
 
+# MIYOO
+libretro-build-miyoo-arm32:
+  extends:
+    - .libretro-miyoo-cmake-arm32
+    - .core-defs
+  variables:
+    DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -fno-fast-math -march=armv5te -mtune=arm926ej-s -ftree-vectorize -funswitch-loops
+    DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -fno-fast-math -march=armv5te -mtune=arm926ej-s -ftree-vectorize -funswitch-loops
+
 # VITA
 libretro-build-vita:
   extends:
