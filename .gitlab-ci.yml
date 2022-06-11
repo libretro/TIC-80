@@ -32,6 +32,10 @@ include:
   - project: 'libretro-infrastructure/ci-templates'
     file: '/osx-cmake-arm64.yml'
 
+  # MacOS PPC
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/osx-cmake-ppc.yml'
+
   ################################## CELLULAR ################################    
   # Android
   - project: 'libretro-infrastructure/ci-templates'
@@ -53,6 +57,18 @@ include:
   # Libnx
   - project: 'libretro-infrastructure/ci-templates'
     file: '/libnx-static-cmake.yml' 
+
+  # Gamecube
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/ngc-static-cmake.yml'
+
+  # Wii
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/wii-static-cmake.yml'
+
+  # WiiU
+  - project: 'libretro-infrastructure/ci-templates'
+    file: '/wiiu-static-cmake.yml'
 
   ################################## MISC ####################################
   # Emscripten
@@ -99,6 +115,14 @@ libretro-build-osx-x64:
   extends:
     - .libretro-osx-cmake-x86
     - .core-defs
+
+# MacOS PPC
+libretro-build-osx-ppc:
+  extends:
+    - .libretro-osx-cmake-ppc
+    - .core-defs
+  variables:
+    CORE_ARGS: -DBUILD_PLAYER=OFF -DBUILD_SOKOL=OFF -DBUILD_SDL=OFF -DBUILD_DEMO_CARTS=OFF -DBUILD_LIBRETRO=ON -DBUILD_WITH_MRUBY=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_DEPLOYMENT_TARGET=10.4 -DUSE_LIBUV=OF
 
 # MacOS ARM64
 libretro-build-osx-arm64:
@@ -201,6 +225,24 @@ libretro-build-rs90-odbeta-mips32:
   variables:
     DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32 -fno-fast-math
     DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32 -fno-fast-math
+
+# Gamecube
+libretro-build-ngc:
+  extends:
+    - .libretro-ngc-static-cmake-retroarch-master
+    - .core-defs
+
+# Wii
+libretro-build-wii:
+  extends:
+    - .libretro-wii-static-cmake-retroarch-master
+    - .core-defs
+
+# WiiU
+libretro-build-wiiu:
+  extends:
+    - .libretro-wiiu-static-cmake-retroarch-master
+    - .core-defs
 
 ################################### MISC #####################################
 
