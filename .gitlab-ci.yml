@@ -77,9 +77,15 @@ include:
 
 # Stages for building
 stages:
+  - build-setup
   - build-prepare
   - build-shared
   - build-static
+
+install-dependencies:
+  stage: build-setup
+  script:
+    - apt-get install libcurl4-openssl-dev
 
 ##############################################################################
 #################################### STAGES ##################################
