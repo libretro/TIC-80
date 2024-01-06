@@ -203,6 +203,8 @@ libretro-build-miyoo-arm32:
   variables:
     DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -fno-fast-math -march=armv5te -mtune=arm926ej-s -ftree-vectorize -funswitch-loops
     DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -fno-fast-math -march=armv5te -mtune=arm926ej-s -ftree-vectorize -funswitch-loops
+    # Miyoo disables Squirrel because it requires fenv.h
+    CORE_ARGS: -DBUILD_WITH_SQUIRREL=OFF -DBUILD_PLAYER=OFF -DBUILD_SOKOL=OFF -DBUILD_SDL=OFF -DBUILD_DEMO_CARTS=OFF -DBUILD_LIBRETRO=ON -DBUILD_WITH_MRUBY=OFF -DBUILD_WITH_PYTHON=OFF -DBUILD_WITH_JANET=OFF -DBUILD_WITH_SCHEME=OFF -DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=ON -DCMAKE_BUILD_TYPE=Release
 
 # VITA
 libretro-build-vita:
