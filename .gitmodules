@@ -3,3 +3,4 @@
 	url = https://github.com/nesbox/TIC-80.git
 	ignore = dirty
 	branch = master
+	shallow = true
