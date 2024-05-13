@@ -25,7 +25,7 @@
       -DBUILD_WITH_SCHEME=OFF
       -DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=ON
       -DCMAKE_BUILD_TYPE=Release
-    EXTRA_PATH: lib
+    EXTRA_PATH: bin
     CMAKE_SOURCE_ROOT: core
 
 # Inclusion templates, required for the build to work
