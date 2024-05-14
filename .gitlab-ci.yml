@@ -118,12 +118,16 @@ libretro-build-windows-x64:
   extends:
     - .libretro-windows-cmake-x86_64
     - .core-defs
+  variables:
+    EXTRA_PATH: lib
 
 # Windows 32-bit
 libretro-build-windows-i686:
   extends:
     - .libretro-windows-cmake-x86
     - .core-defs
+  variables:
+    EXTRA_PATH: lib
 
 # MacOS 64-bit
 libretro-build-osx-x64:
