@@ -4,12 +4,16 @@ Build definitions for the [TIC-80](https://tic80.com/) libretro core. To make an
 
 ## Configuration
 
-There are a few features that are disabled from TIC-80 in order to allow building on libretro's targets...
+The following languages have been disabled in the TIC-80 core to allow building across all of libretro's targets...
 
-- Ruby language support
-- Python language support
-- Janet language support
-- Scheme language support
+- Ruby
+- Python
+- Janet
+- Scheme
+- Squirrel
+- WASM
+- Fennel
+- JavaScript
 
 ## License
 
