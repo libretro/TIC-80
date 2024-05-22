@@ -192,10 +192,11 @@ libretro-build-osx-x86:
 
 ################################### CELLULAR #################################
 # Android ARMv7a
-android-armeabi-v7a:
-  extends:
-    - .libretro-android-cmake-armeabi-v7a
-    - .core-defs
+# TODO: Android ARMv7a needs localeconv in locale.h, along with log2, which is not available on this Android build.
+#android-armeabi-v7a:
+#  extends:
+#    - .libretro-android-cmake-armeabi-v7a
+#    - .core-defs
 
 # Android ARMv8a
 android-arm64-v8a:
@@ -210,10 +211,11 @@ android-x86_64:
     - .core-defs
 
 # Android 32-bit x86
-android-x86:
-  extends:
-    - .libretro-android-cmake-x86
-    - .core-defs
+# TODO: Android x86 needs localeconv in locale.h, along with log2, which is not available on this Android build.
+#android-x86:
+#  extends:
+#    - .libretro-android-cmake-x86
+#    - .core-defs
 
 ################################### CONSOLES #################################
 # Nintendo 3DS
