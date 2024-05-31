@@ -339,7 +339,33 @@ libretro-build-wiiu:
     - .core-defs
   variables:
     EXTRA_PATH: lib
-    CORE_ARGS: "${CORE_ARGS} -DBUILD_WITH_ZLIB=OFF"
+    CORE_ARGS: >
+      -DBUILD_LIBRETRO=ON
+      -D__LIBRETRO__=ON
+      -DBUILD_PLAYER=OFF
+      -DBUILD_PRO=OFF
+      -DBUILD_SOKOL=OFF
+      -DBUILD_SDL=OFF
+      -DBUILD_SDLGPU=OFF
+      -DBUILD_TOOLS=OFF
+      -DBUILD_TOUCH_INPUT=OFF
+      -DBUILD_DEMO_CARTS=OFF
+      -DBUILD_STATIC=ON
+      -DBUILD_WITH_LUA=ON
+      -DBUILD_WITH_MOON=ON
+      -DBUILD_WITH_FENNEL=OFF
+      -DBUILD_WITH_JS=OFF
+      -DBUILD_WITH_SCHEME=OFF
+      -DBUILD_WITH_SQUIRREL=OFF
+      -DBUILD_WITH_PYTHON=OFF
+      -DBUILD_WITH_WREN=ON
+      -DBUILD_WITH_MRUBY=OFF
+      -DBUILD_WITH_JANET=OFF
+      -DBUILD_WITH_WASM=OFF
+      -DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=ON
+      -DCMAKE_BUILD_TYPE=Release
+      -DTIC80_FFT_UNSUPPORTED=ON
+      -DBUILD_WITH_ZLIB=OFF
 
 ################################### MISC #####################################
 
