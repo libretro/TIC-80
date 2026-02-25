@@ -35,6 +35,7 @@
       -DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=ON
       -DCMAKE_BUILD_TYPE=Release
       -DTIC80_FFT_UNSUPPORTED=ON
+      -DBUILD_EDITORS=OFF
     EXTRA_PATH: bin
     CMAKE_SOURCE_ROOT: core
 
@@ -296,6 +297,7 @@ libretro-build-ngc:
       -DCMAKE_BUILD_TYPE=Release
       -DTIC80_FFT_UNSUPPORTED=ON
       -DBUILD_WITH_ZLIB=OFF
+      -DBUILD_EDITORS=OFF
 
 # Wii
 libretro-build-wii:
@@ -331,6 +333,7 @@ libretro-build-wii:
       -DCMAKE_BUILD_TYPE=Release
       -DTIC80_FFT_UNSUPPORTED=ON
       -DBUILD_WITH_ZLIB=OFF
+      -DBUILD_EDITORS=OFF
 
 # WiiU
 libretro-build-wiiu:
@@ -366,6 +369,7 @@ libretro-build-wiiu:
       -DCMAKE_BUILD_TYPE=Release
       -DTIC80_FFT_UNSUPPORTED=ON
       -DBUILD_WITH_ZLIB=OFF
+      -DBUILD_EDITORS=OFF
 
 ################################### MISC #####################################
 
