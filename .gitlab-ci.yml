@@ -14,34 +14,22 @@
       -D__LIBRETRO__=ON
       -DBUILD_PLAYER=OFF
       -DBUILD_PRO=OFF
-      -DBUILD_SOKOL=OFF
       -DBUILD_SDL=OFF
-      -DBUILD_SDLGPU=OFF
       -DBUILD_TOOLS=OFF
       -DBUILD_TOUCH_INPUT=OFF
-      -DBUILD_DEMO_CARTS=OFF
       -DBUILD_STATIC=ON
-      -DBUILD_WITH_LUA=ON
-      -DBUILD_WITH_MOON=ON
-      -DBUILD_WITH_FENNEL=OFF
-      -DBUILD_WITH_JS=OFF
+      -DBUILD_WITH_ALL=ON
       -DBUILD_WITH_SCHEME=OFF
-      -DBUILD_WITH_SQUIRREL=OFF
-      -DBUILD_WITH_PYTHON=OFF
-      -DBUILD_WITH_WREN=ON
-      -DBUILD_WITH_MRUBY=OFF
-      -DBUILD_WITH_JANET=OFF
-      -DBUILD_WITH_WASM=OFF
+      -DBUILD_WITH_RUBY=OFF
       -DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=ON
       -DCMAKE_BUILD_TYPE=Release
-      -DTIC80_FFT_UNSUPPORTED=ON
       -DBUILD_EDITORS=OFF
     EXTRA_PATH: bin
     CMAKE_SOURCE_ROOT: core
 
 # Inclusion templates, required for the build to work
 include:
-  ################################## DESKTOPS ################################    
+  ################################## DESKTOPS ################################
   # Linux
   - project: 'libretro-infrastructure/ci-templates'
     file: '/linux-cmake.yml'
@@ -62,7 +50,7 @@ include:
   - project: 'libretro-infrastructure/ci-templates'
     file: '/osx-cmake-ppc.yml'
 
-  ################################## CELLULAR ################################    
+  ################################## CELLULAR ################################
   # Android
   - project: 'libretro-infrastructure/ci-templates'
     file: '/android-cmake.yml'
@@ -82,7 +70,7 @@ include:
 
   # Libnx
   - project: 'libretro-infrastructure/ci-templates'
-    file: '/libnx-static-cmake.yml' 
+    file: '/libnx-static-cmake.yml'
 
   # Gamecube
   - project: 'libretro-infrastructure/ci-templates'
@@ -99,7 +87,7 @@ include:
   ################################## MISC ####################################
   # Emscripten
   - project: 'libretro-infrastructure/ci-templates'
-    file: '/emscripten-static-cmake.yml' 
+    file: '/emscripten-static-cmake.yml'
 
 # Stages for building
 stages:
@@ -107,11 +95,18 @@ stages:
   - build-shared
   - build-static
 
+.upgrade-cmake:
+  before_script:
+    - |
+      curl -L https://github.com/Kitware/CMake/releases/download/v3.31.11/cmake-3.31.11-linux-x86_64.sh -o cmake-install.sh && \
+      chmod +x cmake-install.sh && \
+      ./cmake-install.sh --skip-license --prefix=/usr/local
+
 ##############################################################################
 #################################### STAGES ##################################
 ##############################################################################
 #
-################################### DESKTOPS #################################    
+################################### DESKTOPS #################################
 # Linux 64-bit
 libretro-build-linux-x64:
   extends:
@@ -194,14 +189,6 @@ android-x86_64:
 #    - .core-defs
 
 ################################### CONSOLES #################################
-# Nintendo 3DS
-libretro-build-ctr:
-  extends:
-    - .libretro-ctr-static-cmake-retroarch-master
-    - .core-defs
-  variables:
-    EXTRA_PATH: lib
-
 # OpenDingux
 libretro-build-dingux-mips32:
   extends:
@@ -263,113 +250,41 @@ libretro-build-rs90-odbeta-mips32:
     DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32 -fno-fast-math
     DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32 -fno-fast-math
 
+# Nintendo 3DS
+libretro-build-ctr:
+  extends:
+    - .libretro-ctr-static-cmake-retroarch-master
+    - .core-defs
+    - .upgrade-cmake
+  variables:
+    CORE_ARGS: "${CORE_ARGS} -DCMAKE_C_FLAGS_RELEASE='-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB' -DCMAKE_CXX_FLAGS_RELEASE='-DLUA_32BITS'"
+
 # Gamecube
 libretro-build-ngc:
   extends:
     - .libretro-ngc-static-cmake-retroarch-master
     - .core-defs
+    - .upgrade-cmake
   variables:
-    EXTRA_PATH: lib
-    CORE_ARGS: >
-      -DBUILD_LIBRETRO=ON
-      -D__LIBRETRO__=ON
-      -DBUILD_PLAYER=OFF
-      -DBUILD_PRO=OFF
-      -DBUILD_SOKOL=OFF
-      -DBUILD_SDL=OFF
-      -DBUILD_SDLGPU=OFF
-      -DBUILD_TOOLS=OFF
-      -DBUILD_TOUCH_INPUT=OFF
-      -DBUILD_DEMO_CARTS=OFF
-      -DBUILD_STATIC=ON
-      -DBUILD_WITH_LUA=ON
-      -DBUILD_WITH_MOON=ON
-      -DBUILD_WITH_FENNEL=OFF
-      -DBUILD_WITH_JS=OFF
-      -DBUILD_WITH_SCHEME=OFF
-      -DBUILD_WITH_SQUIRREL=OFF
-      -DBUILD_WITH_PYTHON=OFF
-      -DBUILD_WITH_WREN=ON
-      -DBUILD_WITH_MRUBY=OFF
-      -DBUILD_WITH_JANET=OFF
-      -DBUILD_WITH_WASM=OFF
-      -DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=ON
-      -DCMAKE_BUILD_TYPE=Release
-      -DTIC80_FFT_UNSUPPORTED=ON
-      -DBUILD_WITH_ZLIB=OFF
-      -DBUILD_EDITORS=OFF
+    CORE_ARGS: "${CORE_ARGS} -DCMAKE_C_FLAGS_RELEASE='-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB' -DCMAKE_CXX_FLAGS_RELEASE='-DLUA_32BITS'"
 
 # Wii
 libretro-build-wii:
   extends:
     - .libretro-wii-static-cmake-retroarch-master
     - .core-defs
+    - .upgrade-cmake
   variables:
-    EXTRA_PATH: lib
-    CORE_ARGS: >
-      -DBUILD_LIBRETRO=ON
-      -D__LIBRETRO__=ON
-      -DBUILD_PLAYER=OFF
-      -DBUILD_PRO=OFF
-      -DBUILD_SOKOL=OFF
-      -DBUILD_SDL=OFF
-      -DBUILD_SDLGPU=OFF
-      -DBUILD_TOOLS=OFF
-      -DBUILD_TOUCH_INPUT=OFF
-      -DBUILD_DEMO_CARTS=OFF
-      -DBUILD_STATIC=ON
-      -DBUILD_WITH_LUA=ON
-      -DBUILD_WITH_MOON=ON
-      -DBUILD_WITH_FENNEL=OFF
-      -DBUILD_WITH_JS=OFF
-      -DBUILD_WITH_SCHEME=OFF
-      -DBUILD_WITH_SQUIRREL=OFF
-      -DBUILD_WITH_PYTHON=OFF
-      -DBUILD_WITH_WREN=ON
-      -DBUILD_WITH_MRUBY=OFF
-      -DBUILD_WITH_JANET=OFF
-      -DBUILD_WITH_WASM=OFF
-      -DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=ON
-      -DCMAKE_BUILD_TYPE=Release
-      -DTIC80_FFT_UNSUPPORTED=ON
-      -DBUILD_WITH_ZLIB=OFF
-      -DBUILD_EDITORS=OFF
+    CORE_ARGS: "${CORE_ARGS} -DCMAKE_C_FLAGS_RELEASE='-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB' -DCMAKE_CXX_FLAGS_RELEASE='-DLUA_32BITS'"
 
 # WiiU
 libretro-build-wiiu:
   extends:
     - .libretro-wiiu-static-cmake-retroarch-master
     - .core-defs
+    - .upgrade-cmake
   variables:
-    EXTRA_PATH: lib
-    CORE_ARGS: >
-      -DBUILD_LIBRETRO=ON
-      -D__LIBRETRO__=ON
-      -DBUILD_PLAYER=OFF
-      -DBUILD_PRO=OFF
-      -DBUILD_SOKOL=OFF
-      -DBUILD_SDL=OFF
-      -DBUILD_SDLGPU=OFF
-      -DBUILD_TOOLS=OFF
-      -DBUILD_TOUCH_INPUT=OFF
-      -DBUILD_DEMO_CARTS=OFF
-      -DBUILD_STATIC=ON
-      -DBUILD_WITH_LUA=ON
-      -DBUILD_WITH_MOON=ON
-      -DBUILD_WITH_FENNEL=OFF
-      -DBUILD_WITH_JS=OFF
-      -DBUILD_WITH_SCHEME=OFF
-      -DBUILD_WITH_SQUIRREL=OFF
-      -DBUILD_WITH_PYTHON=OFF
-      -DBUILD_WITH_WREN=ON
-      -DBUILD_WITH_MRUBY=OFF
-      -DBUILD_WITH_JANET=OFF
-      -DBUILD_WITH_WASM=OFF
-      -DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=ON
-      -DCMAKE_BUILD_TYPE=Release
-      -DTIC80_FFT_UNSUPPORTED=ON
-      -DBUILD_WITH_ZLIB=OFF
-      -DBUILD_EDITORS=OFF
+    CORE_ARGS: "${CORE_ARGS} -DCMAKE_C_FLAGS_RELEASE='-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB' -DCMAKE_CXX_FLAGS_RELEASE='-DLUA_32BITS'"
 
 ################################### MISC #####################################
 
