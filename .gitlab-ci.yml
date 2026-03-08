@@ -98,9 +98,11 @@ stages:
 .upgrade-cmake:
   before_script:
     - |
-      curl -L https://github.com/Kitware/CMake/releases/download/v3.31.11/cmake-3.31.11-linux-x86_64.sh -o cmake-install.sh && \
-      chmod +x cmake-install.sh && \
-      ./cmake-install.sh --skip-license --prefix=/usr/local
+      curl -L https://github.com/Kitware/CMake/releases/download/v3.31.11/cmake-3.31.11-linux-x86_64.sh -o cmake-install.sh
+      chmod +x cmake-install.sh
+      ./cmake-install.sh --skip-license --prefix=$CI_PROJECT_DIR/cmake
+      export PATH="$CI_PROJECT_DIR/cmake/bin:$PATH"
+      cmake --version
 
 ##############################################################################
 #################################### STAGES ##################################
