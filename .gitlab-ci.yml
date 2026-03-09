@@ -26,6 +26,8 @@
       -DBUILD_WITH_WASM=ON
       -DBUILD_WITH_SQUIRREL=ON
       -DBUILD_WITH_PYTHON=ON
+      -DBUILD_WITH_JS=ON
+      -DBUILD_WITH_JANET=ON
       -DBUILD_WITH_RUBY=OFF
       -DBUILD_WITH_YUE=OFF
       -DBUILD_WITH_SCHEME=OFF
@@ -103,8 +105,14 @@ stages:
   - build-shared
   - build-static
 
-.upgrade-cmake:
+.core-some-32bits-system:
+  variables:
+    CORE_32BITS_ARGS: >
+      -DCMAKE_C_FLAGS_RELEASE=-DLUA_32BITS\ -DTIC80_FFT_UNSUPPORTED\ -DPOOR_CLIB
+      -DCMAKE_CXX_FLAGS_RELEASE=-DLUA_32BITS
   before_script:
+    - export NUMPROC=$(($(nproc)/5))
+    - export CORE_ARGS="${CORE_ARGS} ${CORE_32BITS_ARGS}"
     - |
       curl -L https://github.com/Kitware/CMake/releases/download/v3.31.11/cmake-3.31.11-linux-x86_64.sh -o cmake-install.sh
       chmod +x cmake-install.sh
@@ -242,16 +250,19 @@ libretro-build-vita:
     - .libretro-vita-static-cmake-retroarch-master
     - .core-defs
   variables:
-    CORE_ARGS: "${CORE_ARGS} -DCMAKE_POSITION_INDEPENDENT_CODE=OFF"
     EXTRA_PATH: lib
+  before_script:
+    - export NUMPROC=$(($(nproc)/5))
+    - export CORE_ARGS="${CORE_ARGS} -DCMAKE_POSITION_INDEPENDENT_CODE=OFF"
 
 # Libnx
 libretro-build-libnx-aarch64:
   extends:
     - .libretro-libnx-static-cmake-retroarch-master
     - .core-defs
-  variables:
-    EXTRA_PATH: lib
+  before_script:
+    - export NUMPROC=$(($(nproc)/5))
+    - sed -i '13,31 s/^/#/' "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/cmake/nswitch.cmake"
 
 libretro-build-rs90-odbeta-mips32:
   extends:
@@ -266,36 +277,28 @@ libretro-build-ctr:
   extends:
     - .libretro-ctr-static-cmake-retroarch-master
     - .core-defs
-    - .upgrade-cmake
-  variables:
-    CORE_ARGS: "${CORE_ARGS} -DCMAKE_C_FLAGS_RELEASE='-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB' -DCMAKE_CXX_FLAGS_RELEASE='-DLUA_32BITS'"
+    - .core-some-32bits-system
 
 # Gamecube
 libretro-build-ngc:
   extends:
     - .libretro-ngc-static-cmake-retroarch-master
     - .core-defs
-    - .upgrade-cmake
-  variables:
-    CORE_ARGS: "${CORE_ARGS} -DCMAKE_C_FLAGS_RELEASE='-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB' -DCMAKE_CXX_FLAGS_RELEASE='-DLUA_32BITS'"
+    - .core-some-32bits-system
 
 # Wii
 libretro-build-wii:
   extends:
     - .libretro-wii-static-cmake-retroarch-master
     - .core-defs
-    - .upgrade-cmake
-  variables:
-    CORE_ARGS: "${CORE_ARGS} -DCMAKE_C_FLAGS_RELEASE='-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB' -DCMAKE_CXX_FLAGS_RELEASE='-DLUA_32BITS'"
+    - .core-some-32bits-system
 
 # WiiU
 libretro-build-wiiu:
   extends:
     - .libretro-wiiu-static-cmake-retroarch-master
     - .core-defs
-    - .upgrade-cmake
-  variables:
-    CORE_ARGS: "${CORE_ARGS} -DCMAKE_C_FLAGS_RELEASE='-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB' -DCMAKE_CXX_FLAGS_RELEASE='-DLUA_32BITS'"
+    - .core-some-32bits-system
 
 ################################### MISC #####################################
 
