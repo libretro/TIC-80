@@ -108,12 +108,14 @@ stages:
 
 .core-some-32bits-system:
   variables:
-    CORE_32BITS_ARGS: >
-      -DCMAKE_C_FLAGS_RELEASE="-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB"
-      -DCMAKE_CXX_FLAGS_RELEASE="-DLUA_32BITS"
+    EXTRA_PATH: lib
   before_script:
     - export NUMPROC=$(($(nproc)/5))
-    - export CORE_ARGS="${CORE_ARGS} ${CORE_32BITS_ARGS}"
+    - |
+      echo 'set(CMAKE_C_FLAGS_RELEASE "-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB" CACHE STRING "" FORCE)' > build_flags.cmake
+      echo 'set(CMAKE_CXX_FLAGS_RELEASE "-DLUA_32BITS" CACHE STRING "" FORCE)' >> build_flags.cmake
+    - export CORE_ARGS="${CORE_ARGS} -C ${CI_PROJECT_DIR}/build_flags.cmake"
+    - curl -L https://raw.githubusercontent.com/imsys/TIC-80/1a27f7a0dcfaf6149cd2c56e9d173c538526648a/cmake/libretro.cmake -o "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/cmake/libretro.cmake"
     - |
       curl -L https://github.com/Kitware/CMake/releases/download/v3.31.11/cmake-3.31.11-linux-x86_64.sh -o cmake-install.sh
       chmod +x cmake-install.sh
@@ -261,8 +263,11 @@ libretro-build-libnx-aarch64:
   extends:
     - .libretro-libnx-static-cmake-retroarch-master
     - .core-defs
+  variables:
+    EXTRA_PATH: lib
   before_script:
     - export NUMPROC=$(($(nproc)/5))
+    - curl -L https://raw.githubusercontent.com/imsys/TIC-80/1a27f7a0dcfaf6149cd2c56e9d173c538526648a/cmake/libretro.cmake -o "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/cmake/libretro.cmake"
     - sed -i '13,31 s/^/#/' "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/cmake/nswitch.cmake"
 
 libretro-build-rs90-odbeta-mips32:
@@ -310,3 +315,5 @@ libretro-build-emscripten:
     - .core-defs
   variables:
     EXTRA_PATH: lib
+  before_script:
+    - curl -L https://raw.githubusercontent.com/imsys/TIC-80/1a27f7a0dcfaf6149cd2c56e9d173c538526648a/cmake/libretro.cmake -o "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/cmake/libretro.cmake"
