@@ -112,7 +112,7 @@ stages:
     EXTRA_PATH: lib
   before_script:
     - export NUMPROC=$(($(nproc)/5))
-    - [ -n "${DEVKITPPC:-}" ] && export PATH="$PATH:$DEVKITPPC/bin"
+    - '[ -n "${DEVKITPPC:-}" ] && export PATH="$PATH:$DEVKITPPC/bin"'
     - |
       echo 'set(CMAKE_C_FLAGS_RELEASE "-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB" CACHE STRING "" FORCE)' > build_flags.cmake
       echo 'set(CMAKE_CXX_FLAGS_RELEASE "-DLUA_32BITS" CACHE STRING "" FORCE)' >> build_flags.cmake
