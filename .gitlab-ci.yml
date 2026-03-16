@@ -107,6 +107,13 @@ stages:
   - build-shared
   - build-static
 
+.js-patch:
+  before_script:
+    - export NUMPROC=$(($(nproc)/5))
+    - echo 'set(CMAKE_C_FLAGS_RELEASE "-DPOOR_CLIB" CACHE STRING "" FORCE)' > build_flags.cmake
+    - export CORE_ARGS="${CORE_ARGS} -C ${CI_PROJECT_DIR}/build_flags.cmake"
+    - sed -i 's|#include <fenv.h>|#if __has_include(<fenv.h>)\n#include <fenv.h>\n#endif|' "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/vendor/quickjs/quickjs.c"
+
 .core-some-32bits-system:
   variables:
     EXTRA_PATH: lib
@@ -117,6 +124,7 @@ stages:
       echo 'set(CMAKE_C_FLAGS_RELEASE "-DLUA_32BITS -DTIC80_FFT_UNSUPPORTED -DPOOR_CLIB" CACHE STRING "" FORCE)' > build_flags.cmake
       echo 'set(CMAKE_CXX_FLAGS_RELEASE "-DLUA_32BITS" CACHE STRING "" FORCE)' >> build_flags.cmake
     - export CORE_ARGS="${CORE_ARGS} -C ${CI_PROJECT_DIR}/build_flags.cmake"
+    - sed -i 's|#include <fenv.h>|#if __has_include(<fenv.h>)\n#include <fenv.h>\n#endif|' "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/vendor/quickjs/quickjs.c"
     - curl -L https://raw.githubusercontent.com/imsys/TIC-80/1fff1af2e33d71a586abdcac82cf3c3dbf881c49/cmake/libretro.cmake -o "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/cmake/libretro.cmake"
     - |
       curl -L https://github.com/Kitware/CMake/releases/download/v3.31.11/cmake-3.31.11-linux-x86_64.sh -o cmake-install.sh
@@ -227,33 +235,30 @@ libretro-build-dingux-odbeta-mips32:
   extends:
     - .libretro-dingux-odbeta-cmake-mips32
     - .core-defs
+    - .js-patch
   variables:
     DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
     DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
-    CORE_ARGS_EXTRA: >
-      -DBUILD_WITH_JS=OFF
 
 # RetroFW
 libretro-build-retrofw-mips32:
   extends:
     - .libretro-retrofw-odbeta-cmake-mips32
     - .core-defs
+    - .js-patch
   variables:
     DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
     DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -march=mips32 -mtune=mips32r2 -mhard-float
-    CORE_ARGS_EXTRA: >
-      -DBUILD_WITH_JS=OFF
 
 # MIYOO
 libretro-build-miyoo-arm32:
   extends:
     - .libretro-miyoo-cmake-arm32
     - .core-defs
+    - .js-patch
   variables:
     DINGUX_CFLAGS:   -DDINGUX -fomit-frame-pointer -fno-fast-math -march=armv5te -mtune=arm926ej-s -ftree-vectorize -funswitch-loops
     DINGUX_CXXFLAGS: -DDINGUX -fomit-frame-pointer -fno-fast-math -march=armv5te -mtune=arm926ej-s -ftree-vectorize -funswitch-loops
-    CORE_ARGS_EXTRA: >
-      -DBUILD_WITH_JS=OFF
 
 # VITA
 libretro-build-vita:
@@ -262,11 +267,11 @@ libretro-build-vita:
     - .core-defs
   variables:
     EXTRA_PATH: lib
-    CORE_ARGS_EXTRA: >
-      -DBUILD_WITH_JS=OFF
   before_script:
     - export NUMPROC=$(($(nproc)/5))
-    - export CORE_ARGS="${CORE_ARGS} -DCMAKE_POSITION_INDEPENDENT_CODE=OFF"
+    - echo 'set(CMAKE_C_FLAGS_RELEASE "-DPOOR_CLIB" CACHE STRING "" FORCE)' > build_flags.cmake
+    - curl -L https://raw.githubusercontent.com/imsys/TIC-80/1fff1af2e33d71a586abdcac82cf3c3dbf881c49/cmake/libretro.cmake -o "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/cmake/libretro.cmake"
+    - export CORE_ARGS="${CORE_ARGS} -DCMAKE_POSITION_INDEPENDENT_CODE=OFF -C ${CI_PROJECT_DIR}/build_flags.cmake"
 
 # Libnx
 libretro-build-libnx-aarch64:
@@ -279,6 +284,7 @@ libretro-build-libnx-aarch64:
     - export NUMPROC=$(($(nproc)/5))
     - curl -L https://raw.githubusercontent.com/imsys/TIC-80/1fff1af2e33d71a586abdcac82cf3c3dbf881c49/cmake/libretro.cmake -o "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/cmake/libretro.cmake"
     - sed -i '13,31 s/^/#/' "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/cmake/nswitch.cmake"
+    - sed -i 's/set(PREFER_SYSTEM_LIBRARIES ON)/set(PREFER_SYSTEM_LIBRARIES OFF)/' "$CI_PROJECT_DIR/$CMAKE_SOURCE_ROOT/CMakeLists.txt"
 
 libretro-build-rs90-odbeta-mips32:
   extends:
