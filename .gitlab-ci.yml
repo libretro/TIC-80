@@ -75,9 +75,9 @@ include:
   - project: 'libretro-infrastructure/ci-templates'
     file: '/emscripten-static-cmake.yml' 
 
-  # webOS 32-bit (LGTV)
+  # webOS (LGTV)
   - project: 'libretro-infrastructure/ci-templates'
-    file: '/webos-make.yml'
+    file: '/webos-cmake.yml'
 
 # Stages for building
 stages:
@@ -256,8 +256,10 @@ libretro-build-emscripten:
     - .libretro-emscripten-static-cmake-retroarch-master
     - .core-defs
 
-# webOS 32-bit
+# webOS
 libretro-build-webos-armv7a:
   extends:
-    - .libretro-webos-armv7a-make-default
+    - .libretro-webos-armv7a-cmake
     - .core-defs
+  variables:
+    CORE_ARGS: "${CORE_ARGS} -DCMAKE_POLICY_VERSION_MINIMUM=3.5"
