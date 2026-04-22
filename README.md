@@ -10,10 +10,6 @@ The following languages have been disabled in the TIC-80 core to allow building 
 - Python
 - Janet
 - Scheme
-- Squirrel
-- WASM
-- Fennel
-- JavaScript
 
 ## License
 
