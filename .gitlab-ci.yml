@@ -347,4 +347,5 @@ libretro-build-webos-armv7a:
     - .libretro-webos-armv7a-cmake
     - .core-defs
   variables:
-    CORE_ARGS: "${CORE_ARGS} -DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+    CORE_ARGS_EXTRA: >
+      -DCMAKE_C_FLAGS="-Os -g0"
