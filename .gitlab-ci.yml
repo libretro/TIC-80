@@ -348,4 +348,4 @@ libretro-build-webos-armv7a:
     - .core-defs
   variables:
     CORE_ARGS_EXTRA: >
-      -DCMAKE_C_FLAGS="-Os -g0"
+      "-DCMAKE_C_FLAGS='-Os -g0'"
