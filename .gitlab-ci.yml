@@ -347,6 +347,7 @@ libretro-build-webos-armv7a:
     - .libretro-webos-armv7a-cmake
     - .core-defs
   before_script:
+    - !reference [.libretro-webos-cmake, before_script]
     - export CFLAGS="-Os"
     - echo 'set(CMAKE_C_FLAGS_RELEASE "-Os" CACHE STRING "" FORCE)' > build_flags.cmake
     - export CORE_ARGS="${CORE_ARGS} -C ${CI_PROJECT_DIR}/build_flags.cmake"
