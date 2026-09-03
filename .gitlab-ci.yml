@@ -223,11 +223,10 @@ android-x86_64:
     - .core-defs
 
 # Android 32-bit x86
-# TODO: Android x86 needs localeconv in locale.h, along with log2, which is not available on this Android build.
-#android-x86:
-#  extends:
-#    - .libretro-android-cmake-x86
-#    - .core-defs
+android-x86:
+  extends:
+    - .libretro-android-cmake-x86
+    - .core-defs
 
 ################################### CONSOLES #################################
 # OpenDingux
